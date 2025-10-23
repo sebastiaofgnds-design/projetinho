@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARA</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__brand">ARA</div>
+    <div class="topbar__right">
+      <div id="header-notifications"></div>
+      <button id="btn-logout" class="btn btn--ghost">Sair</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside id="sidebar" class="sidebar"></aside>
+
+    <main class="content">
+      <div class="content__inner">
+        <div id="app"><!-- Router injeta aqui --></div>
+      </div>
+      <footer class="footer">© <span id="year"></span> Vela</footer>
+    </main>
+  </div>
+
+  <!-- JS (módulos ES) -->
+  <script type="module">
+    import { signOut } from '/js/services/auth.js';
+    import '/js/index.js';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('btn-logout').onclick = () => signOut();
+  </script>
+</body>
+</html>

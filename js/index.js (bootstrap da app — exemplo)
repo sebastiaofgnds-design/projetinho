@@ -1,0 +1,28 @@
+// js/index.js
+import { startRouter, register } from './core/router.js';
+import { renderSidebar } from './components/comuns/sidebar.js';
+import { renderHeaderNotifications } from './components/comuns/header-notifications.js';
+import { loadTenantRole } from './core/permissions.js';
+import { supabase } from './services/supabase.js';
+import { renderAdmin } from './setores/admin.js';
+
+register('#/', async () => {
+  document.getElementById('app').innerHTML = '<h2>Dashboard</h2><p>Bem-vindo.</p>';
+});
+
+register('#/admin/usuarios', renderAdmin);
+
+register('#/notfound', async () => {
+  document.getElementById('app').innerHTML = '<h3>Rota não encontrada</h3>';
+});
+
+// Primeira carga
+(async function boot() {
+  renderSidebar();
+  await renderHeaderNotifications();
+
+  // força header do host (se trocar de subdomínio em runtime)
+  supabase.functions?.setAuth?.(supabase.auth); // safe no-op; só garante sessão nas chamadas
+  await loadTenantRole().catch(() => {});       // tenta descobrir papel já no início
+  startRouter();
+})();
